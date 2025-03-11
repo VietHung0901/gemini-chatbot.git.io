@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +15,7 @@
             height: 100vh;
             margin: 0;
         }
+
         .chat-container {
             width: 400px;
             background: white;
@@ -21,6 +23,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
+
         .chat-box {
             height: 400px;
             overflow-y: auto;
@@ -28,27 +31,32 @@
             display: flex;
             flex-direction: column;
         }
+
         .message {
             max-width: 75%;
             padding: 10px;
             border-radius: 10px;
             margin: 5px 0;
         }
+
         .user-message {
             background-color: #007bff;
             color: white;
             align-self: flex-end;
         }
+
         .bot-message {
             background-color: #e0e0e0;
             align-self: flex-start;
         }
+
         .input-container {
             display: flex;
             border-top: 1px solid #ddd;
             padding: 10px;
             background: white;
         }
+
         .input-container input {
             flex: 1;
             padding: 10px;
@@ -56,6 +64,7 @@
             outline: none;
             border-radius: 5px;
         }
+
         .input-container button {
             background: #007bff;
             color: white;
@@ -67,6 +76,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
@@ -97,8 +107,11 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message })
                 });
-                const data = await response.json();
                 
+                const responseText = await response.text();
+                console.log("Raw response:", responseText);
+                const data = await response.json();
+
                 // Hiển thị tin nhắn của AI
                 const botMessageDiv = document.createElement("div");
                 botMessageDiv.className = "message bot-message";
@@ -111,4 +124,5 @@
         }
     </script>
 </body>
+
 </html>
