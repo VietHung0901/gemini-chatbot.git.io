@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat</title>
+    <title>AI Chat - Gemini</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -17,26 +18,31 @@
         }
 
         .chat-container {
-            width: 400px;
+            width: 80%;
+            height: 80vh;
             background: white;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
         .chat-box {
-            height: 400px;
+            flex: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
+            background: #fafafa;
         }
 
         .message {
-            max-width: 75%;
-            padding: 10px;
+            max-width: 70%;
+            padding: 12px;
             border-radius: 10px;
-            margin: 5px 0;
+            margin: 8px 0;
+            word-wrap: break-word;
         }
 
         .user-message {
@@ -53,26 +59,35 @@
         .input-container {
             display: flex;
             border-top: 1px solid #ddd;
-            padding: 10px;
+            padding: 15px;
             background: white;
         }
 
         .input-container input {
             flex: 1;
-            padding: 10px;
-            border: none;
+            padding: 12px;
+            border: 1px solid #ccc;
             outline: none;
             border-radius: 5px;
+            font-size: 16px;
         }
 
         .input-container button {
             background: #007bff;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border-radius: 5px;
-            margin-left: 5px;
+            margin-left: 10px;
             cursor: pointer;
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: gray;
         }
     </style>
 </head>
@@ -81,10 +96,11 @@
     <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
         <div class="input-container">
-            <input type="text" id="message" placeholder="Type a message...">
+            <input type="text" id="message" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
+    <div class="footer">Made by Trần Việt Hùng</div>
 
     <script>
         async function sendMessage() {
@@ -92,7 +108,7 @@
             const chatBox = document.getElementById("chat-box");
             const message = messageInput.value.trim();
             if (!message) return;
-    
+
             // Hiển thị tin nhắn của người dùng
             const userMessageDiv = document.createElement("div");
             userMessageDiv.className = "message user-message";
@@ -100,20 +116,20 @@
             chatBox.appendChild(userMessageDiv);
             messageInput.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
-    
+
             try {
-                const response = await fetch("https://gemini-chatbot-git-io.onrender.com/chat", {
+                const response = await fetch("https://gemini-chatbot-git-io.onrender.com/chat", { // Thay thế bằng URL API Gemini
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message })
                 });
-    
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-    
-                const data = await response.json(); // Chỉ gọi `response.json()` một lần
-    
+
+                const data = await response.json();
+
                 // Hiển thị tin nhắn của AI
                 const botMessageDiv = document.createElement("div");
                 botMessageDiv.className = "message bot-message";
@@ -124,8 +140,13 @@
                 console.error("Error:", error);
             }
         }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
     </script>
-    
 </body>
 
 </html>
