@@ -92,7 +92,7 @@
             const chatBox = document.getElementById("chat-box");
             const message = messageInput.value.trim();
             if (!message) return;
-
+    
             // Hiển thị tin nhắn của người dùng
             const userMessageDiv = document.createElement("div");
             userMessageDiv.className = "message user-message";
@@ -100,18 +100,20 @@
             chatBox.appendChild(userMessageDiv);
             messageInput.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
-
+    
             try {
                 const response = await fetch("https://gemini-chatbot-git-io.onrender.com/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ message })
                 });
-                
-                const responseText = await response.text();
-                console.log("Raw response:", responseText);
-                const data = await response.json();
-
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+    
+                const data = await response.json(); // Chỉ gọi `response.json()` một lần
+    
                 // Hiển thị tin nhắn của AI
                 const botMessageDiv = document.createElement("div");
                 botMessageDiv.className = "message bot-message";
@@ -123,6 +125,7 @@
             }
         }
     </script>
+    
 </body>
 
 </html>
